@@ -67,9 +67,6 @@ button {
   font-weight: bold;
   display: none;
 }
-.show-name {
-  font-size: 10px;
-}
 
 .show {
   display: flex;
@@ -85,7 +82,6 @@ button {
   border: none;
   padding: 0;
   cursor: pointer;
-  font-size: 18px;
   line-height: 22px;
 }
 
@@ -104,7 +100,6 @@ button {
 }
 
 .show h2 {
-  font-size: 30px;
   line-height: 36px;
   margin: 0 0 10px 0;
 }
@@ -149,9 +144,7 @@ button {
   .header {
     margin-left: 0;
   }
-  .show-name {
-    font-size: 1rem;
-  }
+
 
   .search {
     width: 100%;
