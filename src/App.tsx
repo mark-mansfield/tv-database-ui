@@ -1,7 +1,10 @@
 import React, { useState, ReactChild, useRef } from 'react';
 import './App.css';
-import { Hero, Search, Meta } from './components';
+import { Hero, Search, Meta, CastMember } from './components';
 import { IShow, FormValues, ICastMember } from './types';
+import parse from 'html-react-parser';
+import DOMPurify from 'dompurify';
+
 
 export default function App(): JSX.Element {
   const [heroImage, setHeroImage] = useState<string>('');
@@ -147,7 +150,9 @@ function ShowList({ shows, onSelectShow }: { shows: Array<IShow>; onSelectShow: 
 
 function Show({ show, onCancel }: { show: IShow; onCancel: () => void }): JSX.Element {
   const cast = show._embedded.cast;
-
+  const showCast = cast.length > 0;
+  const premierText = show.premiered ? 'Premiered ' + show.premiered : 'Yet to premiere';
+  const sanitzedData = parse(DOMPurify.sanitize(usedSummary));
   return (
     <>
       <div className="show-back">
@@ -157,28 +162,22 @@ function Show({ show, onCancel }: { show: IShow; onCancel: () => void }): JSX.El
         <div className="show-image">{show.image && <img src={show.image.original} alt="" />}</div>
         <div className="show-details">
           <h2>{show.name}</h2>
-          <div className="show-meta">{show.premiered ? 'Premiered ' + show.premiered : 'Yet to premiere'}</div>
-          <div dangerouslySetInnerHTML={{ __html: show.summary }} />
-          <h3>Cast</h3>
-          <ul className="cast">
-            {cast.map((member: ICastMember) => (
-              <li key={member.character.name}>
-                <CastMember member={member} />
-              </li>
-            ))}
-          </ul>
+          <div className="show-meta">{premierText}</div>
+          <div>{sanitzedData}</div>
+          {showCast ? (
+            <>
+              <h3>Cast</h3>
+              <ul className="cast">
+                {cast.map((member: ICastMember) => (
+                  <li key={member.character.name}>
+                    <CastMember member={member} />
+                  </li>
+                ))}
+              </ul>
+            </>
+          ) : null}
         </div>
       </div>
     </>
-  );
-}
-
-function CastMember({ member }: { member: ICastMember }): JSX.Element {
-  return (
-    <div className="cast-member">
-      <div className="cast-member-image">{member.person.image && <img src={member.person.image.medium} alt="" />}</div>
-      <strong>{member.person.name}</strong>&nbsp;as&nbsp;
-      {member.character.name}
-    </div>
   );
 }
