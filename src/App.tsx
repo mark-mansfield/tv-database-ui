@@ -37,18 +37,6 @@ export default function App(): JSX.Element {
     fetch(`https://api.tvmaze.com/search/shows?q=${values.search}`)
       .then((r: Response) => r.json())
       .then((json: Array<{ show: IShow }>) => {
-        let foundImg = false;
-
-        let i = 0;
-        while (foundImg == false) {
-          const imgPath = json[i].show.image.original;
-          if (imgPath) {
-            setHeroImage(imgPath);
-            foundImg = true;
-          }
-          i++;
-        }
-
         setHasSearched(true);
         setIsLoading(false);
         setShows(
@@ -73,7 +61,6 @@ export default function App(): JSX.Element {
       .then((r: Response) => r.json())
       .then((json: IShow) => {
         setIsLoading(false);
-        console.log(json);
         setShow(json);
         if (json?.image?.original) {
           setHeroImage(json.image.original);
@@ -81,7 +68,6 @@ export default function App(): JSX.Element {
       })
       .catch((e) => {
         setIsLoading(false);
-        console.log(e);
         setError('Could not load show details.');
       });
   }
