@@ -1,5 +1,5 @@
-import React from "react";
-import "./App.css";
+import React from 'react';
+import './App.css';
 
 interface IShow {
   id: string;
@@ -28,9 +28,9 @@ interface ICastMember {
 }
 
 export default function App(): JSX.Element {
-  const [query, setQuery] = React.useState<string>("");
+  const [query, setQuery] = React.useState<string>('');
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  const [error, setError] = React.useState<string>("");
+  const [error, setError] = React.useState<string>('');
   const [hasSearched, setHasSearched] = React.useState<boolean>(false);
   const [shows, setShows] = React.useState<Array<IShow>>([]);
   const [show, setShow] = React.useState<IShow | null>(null);
@@ -40,7 +40,7 @@ export default function App(): JSX.Element {
     setQuery(nextQuery);
     setShows([]);
     setShow(null);
-    setError("");
+    setError('');
   }
 
   function onSearch(): void {
@@ -48,7 +48,7 @@ export default function App(): JSX.Element {
     setIsLoading(true);
     setShows([]);
     setShow(null);
-    setError("");
+    setError('');
 
     fetch(`https://api.tvmaze.com/search/shows?q=${query}`)
       .then((r: Response) => r.json())
@@ -59,13 +59,13 @@ export default function App(): JSX.Element {
       })
       .catch(() => {
         setIsLoading(false);
-        setError("Could not load shows.");
+        setError('Could not load shows.');
       });
   }
 
   function onSelectShow(show: IShow): void {
     setIsLoading(true);
-    setError("");
+    setError('');
 
     fetch(`https://api.tvmaze.com/shows/${show.id}?embed=cast`)
       .then((r: Response) => r.json())
@@ -75,7 +75,7 @@ export default function App(): JSX.Element {
       })
       .catch(() => {
         setIsLoading(false);
-        setError("Could not load show details.");
+        setError('Could not load show details.');
       });
   }
 
@@ -89,7 +89,9 @@ export default function App(): JSX.Element {
           onChange={(e) => onQueryChange(e.target.value)}
           placeholder="Enter the name of a TV show..."
         />
-        <button type="button" onClick={onSearch}>Search</button>
+        <button type="button" onClick={onSearch}>
+          Search
+        </button>
       </form>
 
       {error && <div>{error}</div>}
@@ -114,48 +116,50 @@ export default function App(): JSX.Element {
   );
 }
 
-function Loading({
-  isLoading,
-  children,
-}: {
-  isLoading: boolean;
-  children: React.ReactChild;
-}): JSX.Element {
+function Loading({ isLoading, children }: { isLoading: boolean; children: React.ReactChild }): JSX.Element {
   return isLoading ? <div>Loading...</div> : <>{children}</>;
 }
 
-function ShowList({
-  shows,
-  onSelectShow,
-}: {
-  shows: Array<IShow>;
-  onSelectShow: (show: IShow) => void;
-}): JSX.Element {
+function ShowList({ shows, onSelectShow }: { shows: Array<IShow>; onSelectShow: (show: IShow) => void }): JSX.Element {
   return (
     <div className="show-list">
       {shows.map((show) => {
         return (
-          <div
+          <button
+            aria-label={`show ${show.name} selected click to read more`}
             key={show.id}
+            tabIndex={0}
             className="show-preview"
-            onClick={() => onSelectShow(show)}
-          >
-            {show.image && <img src={show.image.medium} alt="" />}
-            <span>{show.name}</span>
-          </div>
+            onClick={() => onSelectShow(show)}>
+            {show.image ? (
+              <div className="">
+                <img src={show?.image.medium} alt="" key={show.id} tabIndex={-1} width="100%" />
+                <span tabIndex={-1}>{show.name}</span>
+              </div>
+            ) : (
+              <div className="">
+                <p className="show-name"tabIndex={-1}>
+                  {show.name}
+                </p>
+              </div>
+            )}
+          </button>
+
+          // <div
+          //   key={show.id}
+          //   className="show-preview"
+          //   onClick={() => onSelectShow(show)}
+          // >
+          //   {show.image && <img src={show.image.medium} alt="" />}
+          //   {/* <span>{show.name}</span> */}
+          // </div>
         );
       })}
     </div>
   );
 }
 
-function Show({
-  show,
-  onCancel,
-}: {
-  show: IShow;
-  onCancel: () => void;
-}): JSX.Element {
+function Show({ show, onCancel }: { show: IShow; onCancel: () => void }): JSX.Element {
   const cast = show._embedded.cast;
 
   return (
@@ -164,14 +168,10 @@ function Show({
         <button onClick={onCancel}>Back to list</button>
       </div>
       <div className="show">
-        <div className="show-image">
-          {show.image && <img src={show.image.original} alt="" />}
-        </div>
+        <div className="show-image">{show.image && <img src={show.image.original} alt="" />}</div>
         <div className="show-details">
           <h2>{show.name}</h2>
-          <div className="show-meta">
-            {show.premiered ? "Premiered " + show.premiered : "Yet to premiere"}
-          </div>
+          <div className="show-meta">{show.premiered ? 'Premiered ' + show.premiered : 'Yet to premiere'}</div>
           <div dangerouslySetInnerHTML={{ __html: show.summary }} />
           <h3>Cast</h3>
           <ul className="cast">
@@ -190,9 +190,7 @@ function Show({
 function CastMember({ member }: { member: ICastMember }): JSX.Element {
   return (
     <div className="cast-member">
-      <div className="cast-member-image">
-        {member.person.image && <img src={member.person.image.medium} alt="" />}
-      </div>
+      <div className="cast-member-image">{member.person.image && <img src={member.person.image.medium} alt="" />}</div>
       <strong>{member.person.name}</strong>&nbsp;as&nbsp;
       {member.character.name}
     </div>
