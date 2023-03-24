@@ -5,8 +5,8 @@ import { IShow, FormValues, ICastMember } from './types';
 import parse from 'html-react-parser';
 import DOMPurify from 'dompurify';
 
-const DEFAULT_HERO_IMAGE =
-  'https://raw.githubusercontent.com/jellyfin/jellyfin-ux/master/plugins/SVG/jellyfin-plugin-tvmaze.svg';
+export const DEFAULT_HERO_IMAGE =
+  'https://images.ladbible.com/resize?type=webp&quality=70&width=720&fit=contain&gravity=null&dpr=2&url=https://eu-images.contentstack.com/v3/assets/bltcd74acc1d0a99f3a/blt463df292361e2de7/62c60c00383b79158e7ae49d/Untitled_design_-_2022-07-06T232454.969.png';
 
 export default function App(): JSX.Element {
   const [heroImage, setHeroImage] = useState<string>(DEFAULT_HERO_IMAGE);
@@ -173,15 +173,18 @@ function Show({ show, onCancel }: { show: IShow; onCancel: () => void }): JSX.El
   const showCast = cast.length > 0;
   const premierText = show.premiered ? 'Premiered ' + show.premiered : 'Yet to premiere';
   const sanitzedData = parse(DOMPurify.sanitize(usedSummary));
-
-
+  const showImage = show?.image?.original;
   return (
     <>
       <div className="show-back">
         <button onClick={onCancel}>Back to list</button>
       </div>
       <div className="show">
-       {show?.image?.original ? <div className="show-image"> <img src={show.image.original} alt="" /></div> : null}
+        {showImage ? (
+          <div className="show-image">
+            <img src={show.image.original} alt="" />
+          </div>
+        ) : null}
         <div className="show-details">
           <h2>{show.name}</h2>
           <div className="show-meta">{premierText}</div>
@@ -189,16 +192,21 @@ function Show({ show, onCancel }: { show: IShow; onCancel: () => void }): JSX.El
             {sanitzedData}
             {hasLargeSummary ? (
               <>
-                <a onClick={toggleShowMore} aria-label="show full summary" tabIndex={0}>
+                <div
+                  onClick={toggleShowMore}
+                  role="button"
+                  className="button"
+                  aria-label="show full summary"
+                  tabIndex={0}>
                   {showFullSummary ? 'less' : 'more'}
-                </a>
+                </div>
               </>
             ) : null}
           </div>
           {showCast ? (
             <>
               <h3>Cast</h3>
-              <ul className="cast">
+              <ul className={`cast ${!showImage || cast.length > 5 ? 'two__column' : ''}`}>
                 {cast.map((member: ICastMember) => (
                   <li key={member.character.name}>
                     <CastMember member={member} />

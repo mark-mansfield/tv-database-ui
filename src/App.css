@@ -96,7 +96,6 @@
 }
 
 .show h2 {
-  line-height: 36px;
   margin: 0 0 10px 0;
 }
 
@@ -109,6 +108,12 @@
   padding: 0;
 }
 
+.two__column {
+  columns: 2;
+  -webkit-columns: 2;
+  -moz-columns: 2;
+}
+
 .cast-member {
   margin-bottom: 10px;
   display: flex;
@@ -116,8 +121,11 @@
 }
 
 .cast-member-image {
-  max-width: 40px;
+  width: 96px;
+  height: 96px;
   margin-right: 10px;
+  border-radius: 50%;
+  overflow: hidden;
 }
 
 .cast-member-image img {
@@ -127,6 +135,12 @@
 .header {
   width: 80%;
   margin-left: 36px;
+}
+
+.button {
+  cursor: pointer;
+  color: dodgerBlue;
+  font-weight: bold;
 }
 
 @media screen and (min-width: 480px) {

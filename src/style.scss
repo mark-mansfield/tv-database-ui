@@ -22,6 +22,7 @@ h2 {
 }
 h3 {
   font-size: calc(1rem + 3.6vw);
+  margin: 1rem 1rem 1rem 0rem;
 }
 
 input,
@@ -48,9 +49,12 @@ button {
   border: 0;
 }
 
+ul {
+  list-style-type: none;
+}
+
 a,
 button {
   color: dodgerBlue;
-  cursor: pointer;
   font-weight: bold;
 }
