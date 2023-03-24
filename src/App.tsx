@@ -173,13 +173,15 @@ function Show({ show, onCancel }: { show: IShow; onCancel: () => void }): JSX.El
   const showCast = cast.length > 0;
   const premierText = show.premiered ? 'Premiered ' + show.premiered : 'Yet to premiere';
   const sanitzedData = parse(DOMPurify.sanitize(usedSummary));
+
+
   return (
     <>
       <div className="show-back">
         <button onClick={onCancel}>Back to list</button>
       </div>
       <div className="show">
-        <div className="show-image">{show.image && <img src={show.image.original} alt="" />}</div>
+       {show?.image?.original ? <div className="show-image"> <img src={show.image.original} alt="" /></div> : null}
         <div className="show-details">
           <h2>{show.name}</h2>
           <div className="show-meta">{premierText}</div>
