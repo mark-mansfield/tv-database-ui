@@ -81,7 +81,9 @@ export default function App(): JSX.Element {
 
   return (
     <div className="app">
-      <h1>TV Database</h1>
+      <header className="header">
+        <h1>TV Database</h1>
+      </header>
       <form className="search">
         <input
           autoFocus
@@ -138,7 +140,7 @@ function ShowList({ shows, onSelectShow }: { shows: Array<IShow>; onSelectShow: 
               </div>
             ) : (
               <div className="">
-                <p className="show-name"tabIndex={-1}>
+                <p className="show-name" tabIndex={-1}>
                   {show.name}
                 </p>
               </div>

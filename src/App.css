@@ -145,7 +145,15 @@ button {
   border: 0;
 }
 
+.header {
+  width: 80%;
+  margin-left: 20px;
+}
+
 @media screen and (min-width: 480px) {
+  .header {
+    margin-left: 0;
+  }
   .show-name {
     font-size: 1rem;
   }
