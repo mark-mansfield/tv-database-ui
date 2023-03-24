@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState, ReactChild } from 'react';
 import './App.css';
+import { Hero } from './components';
 
 interface IShow {
   id: string;
@@ -28,12 +29,13 @@ interface ICastMember {
 }
 
 export default function App(): JSX.Element {
-  const [query, setQuery] = React.useState<string>('');
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  const [error, setError] = React.useState<string>('');
-  const [hasSearched, setHasSearched] = React.useState<boolean>(false);
-  const [shows, setShows] = React.useState<Array<IShow>>([]);
-  const [show, setShow] = React.useState<IShow | null>(null);
+  const [heroImage, setHeroImage] = useState<string>('');
+  const [query, setQuery] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
+  const [hasSearched, setHasSearched] = useState<boolean>(false);
+  const [shows, setShows] = useState<Array<IShow>>([]);
+  const [show, setShow] = useState<IShow | null>(null);
 
   function onQueryChange(nextQuery: string): void {
     setHasSearched(false);
@@ -72,6 +74,7 @@ export default function App(): JSX.Element {
       .then((json: IShow) => {
         setIsLoading(false);
         setShow(json);
+        setHeroImage(json.image.original);
       })
       .catch(() => {
         setIsLoading(false);
@@ -80,45 +83,47 @@ export default function App(): JSX.Element {
   }
 
   return (
-    <div className="app">
-      <header className="header">
-        <h1>TV Database</h1>
-      </header>
-      <form className="search">
-        <input
-          autoFocus
-          value={query}
-          onChange={(e) => onQueryChange(e.target.value)}
-          placeholder="Enter the name of a TV show..."
-        />
-        <button type="button" onClick={onSearch}>
-          Search
-        </button>
-      </form>
+    <div>
+      <Hero imgUrl={heroImage} />
+      <div className="app">
+        <header className="header">
+          <h1>TV Database</h1>
+        </header>
+        <form className="search">
+          <input
+            value={query}
+            onChange={(e) => onQueryChange(e.target.value)}
+            placeholder="Enter the name of a TV show..."
+          />
+          <button type="button" onClick={onSearch}>
+            Search
+          </button>
+        </form>
 
-      {error && <div>{error}</div>}
+        {error && <div>{error}</div>}
 
-      <div>
-        <Loading isLoading={isLoading}>
-          {show ? (
-            <Show show={show} onCancel={() => setShow(null)} />
-          ) : (
-            <>
-              {hasSearched && query && (
-                <div className="results-meta">
-                  {shows.length} results for "{query}"
-                </div>
-              )}
-              <ShowList shows={shows} onSelectShow={onSelectShow} />
-            </>
-          )}
-        </Loading>
+        <div>
+          <Loading isLoading={isLoading}>
+            {show ? (
+              <Show show={show} onCancel={() => setShow(null)} />
+            ) : (
+              <>
+                {hasSearched && query && (
+                  <div className="results-meta">
+                    {shows.length} results for "{query}"
+                  </div>
+                )}
+                <ShowList shows={shows} onSelectShow={onSelectShow} />
+              </>
+            )}
+          </Loading>
+        </div>
       </div>
     </div>
   );
 }
 
-function Loading({ isLoading, children }: { isLoading: boolean; children: React.ReactChild }): JSX.Element {
+function Loading({ isLoading, children }: { isLoading: boolean; children: ReactChild }): JSX.Element {
   return isLoading ? <div>Loading...</div> : <>{children}</>;
 }
 
