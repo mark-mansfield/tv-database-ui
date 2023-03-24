@@ -35,15 +35,14 @@ export default function App(): JSX.Element {
       .then((json: Array<{ show: IShow }>) => {
         let foundImg = false;
 
-
-        let i = 0
+        let i = 0;
         while (foundImg == false) {
           const imgPath = json[i].show.image.original;
           if (imgPath) {
             setHeroImage(imgPath);
             foundImg = true;
           }
-          i++
+          i++;
         }
 
         setHasSearched(true);
@@ -93,9 +92,9 @@ export default function App(): JSX.Element {
             <Show show={show} onCancel={() => setShow(null)} />
           ) : (
             <>
-              {hasSearched && query && (
+              {hasSearched && usedQuery && (
                 <div className="results-meta">
-                  {shows.length} results for "{query}"
+                  {shows.length} results for "{usedQuery}"
                 </div>
               )}
               <ShowList shows={shows} onSelectShow={onSelectShow} />
