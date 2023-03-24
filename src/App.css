@@ -61,7 +61,7 @@
 .show-preview span {
   color: black;
   font-weight: bold;
-  display: block;
+  display: none;
 }
 
 .show {
@@ -83,7 +83,7 @@
 }
 
 .show-back button:before {
-  content: "≡ ";
+  content: '≡ ';
 }
 
 .show-image {
@@ -105,7 +105,6 @@
 .show-meta {
   color: #777;
 }
-
 
 .cast {
   list-style: none;
