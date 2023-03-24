@@ -138,7 +138,7 @@ function ShowList({ shows, onSelectShow }: { shows: Array<IShow>; onSelectShow: 
               </div>
             ) : (
               <div className="">
-                <p tabIndex={-1} style={{ fontSize: '5vw' }}>
+                <p className="show-name"tabIndex={-1}>
                   {show.name}
                 </p>
               </div>
