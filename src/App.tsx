@@ -5,10 +5,11 @@ import { IShow, FormValues, ICastMember } from './types';
 import parse from 'html-react-parser';
 import DOMPurify from 'dompurify';
 
+const DEFAULT_HERO_IMAGE =
+  'https://raw.githubusercontent.com/jellyfin/jellyfin-ux/master/plugins/SVG/jellyfin-plugin-tvmaze.svg';
+
 export default function App(): JSX.Element {
-  const [heroImage, setHeroImage] = useState<string>(
-    'https://raw.githubusercontent.com/jellyfin/jellyfin-ux/master/plugins/SVG/jellyfin-plugin-tvmaze.svg'
-  );
+  const [heroImage, setHeroImage] = useState<string>(DEFAULT_HERO_IMAGE);
   const [query, setQuery] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
@@ -56,7 +57,6 @@ export default function App(): JSX.Element {
   function onSelectShow(show: IShow): void {
     setIsLoading(true);
     setError('');
-
     fetch(`https://api.tvmaze.com/shows/${show.id}?embed=cast`)
       .then((r: Response) => r.json())
       .then((json: IShow) => {
@@ -64,6 +64,8 @@ export default function App(): JSX.Element {
         setShow(json);
         if (json?.image?.original) {
           setHeroImage(json.image.original);
+        } else {
+          setHeroImage(DEFAULT_HERO_IMAGE);
         }
       })
       .catch((e) => {
