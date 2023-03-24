@@ -27,7 +27,7 @@ h3 {
 
 input,
 button {
-  font-size: calc(0.95rem + 0.25vw);
+  font-size: calc(0.65rem + 0.25vw);
 }
 
 .visuallyHidden {
@@ -43,9 +43,10 @@ button {
 
 button {
   height: 100%;
-  background: none;
+  text-transform: uppercase;
   padding: 0;
   margin: 0;
+  cursor: pointer;
   border: 0;
 }
 
@@ -55,6 +56,6 @@ ul {
 
 a,
 button {
-  color: dodgerBlue;
+  color: white;
   font-weight: bold;
 }

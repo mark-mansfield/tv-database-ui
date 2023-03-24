@@ -1,9 +1,7 @@
 import React, { useState, ReactChild, useRef, useEffect } from 'react';
 import './App.css';
-import { Hero, Search, Meta, CastMember, Loader } from './components';
-import { IShow, FormValues, ICastMember } from './types';
-import parse from 'html-react-parser';
-import DOMPurify from 'dompurify';
+import { Hero, Search, Meta, Show, Loader } from './components';
+import { IShow, FormValues } from './types';
 
 export const DEFAULT_HERO_IMAGE =
   'https://images.ladbible.com/resize?type=webp&quality=70&width=720&fit=contain&gravity=null&dpr=2&url=https://eu-images.contentstack.com/v3/assets/bltcd74acc1d0a99f3a/blt463df292361e2de7/62c60c00383b79158e7ae49d/Untitled_design_-_2022-07-06T232454.969.png';
@@ -13,7 +11,7 @@ export default function App(): JSX.Element {
   const [query, setQuery] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
-  const [hasSearched, setHasSearched] = useState<boolean>(false);
+  const [_, setHasSearched] = useState<boolean>(false);
   const [shows, setShows] = useState<Array<IShow>>([]);
   const [show, setShow] = useState<IShow | null>(null);
   const queryRef = useRef<string>('');
@@ -123,100 +121,5 @@ function ShowList({ shows, onSelectShow }: { shows: Array<IShow>; onSelectShow: 
         );
       })}
     </div>
-  );
-}
-
-function Show({ show, onCancel }: { show: IShow; onCancel: () => void }): JSX.Element {
-  const MAX_TEXT = 360;
-  const [usedSummary, setUsedSummary] = useState('');
-  const [showFullSummary, setShowFullSummary] = useState(true);
-  const [hasLargeSummary, setHasLargeSummary] = useState(false);
-  const [summary, setSummary] = useState('');
-
-  function toggleShowMore() {
-    setShowFullSummary(!showFullSummary);
-    console.log('showing more', !showFullSummary);
-  }
-
-  useEffect(() => {
-    if (!showFullSummary) {
-      setUsedSummary(show.summary.substring(0, MAX_TEXT));
-    }
-    if (showFullSummary) {
-      setUsedSummary(show.summary);
-    }
-  }, [showFullSummary]);
-
-  //  because we need to set a default view of the summary
-  useEffect(() => {
-    if (!show.summary) return;
-
-    //  init a flag
-    const hasLargeSummary = show.summary.length > MAX_TEXT ? true : false;
-    setHasLargeSummary(hasLargeSummary);
-
-    // store the summary
-    setSummary(show.summary);
-
-    // set displayed summary to full or partial
-    if (hasLargeSummary) {
-      setUsedSummary(show.summary.substring(0, MAX_TEXT));
-      setShowFullSummary(false);
-    }
-
-    if (!hasLargeSummary) {
-      setUsedSummary(show.summary);
-    }
-  }, [show.summary]);
-
-  const cast = show._embedded.cast;
-  const showCast = cast.length > 0;
-  const premierText = show.premiered ? 'Premiered ' + show.premiered : 'Yet to premiere';
-  const sanitzedData = parse(DOMPurify.sanitize(usedSummary));
-  const showImage = show?.image?.original;
-  return (
-    <>
-      <div className="show-back">
-        <button onClick={onCancel}>Back to list</button>
-      </div>
-      <div className="show">
-        {showImage ? (
-          <div className="show-image">
-            <img src={show.image.original} alt="" />
-          </div>
-        ) : null}
-        <div className="show-details">
-          <h2>{show.name}</h2>
-          <div className="show-meta">{premierText}</div>
-          <div>
-            {sanitzedData}
-            {hasLargeSummary ? (
-              <>
-                <div
-                  onClick={toggleShowMore}
-                  role="button"
-                  className="button"
-                  aria-label="show full summary"
-                  tabIndex={0}>
-                  {showFullSummary ? 'less' : 'more'}
-                </div>
-              </>
-            ) : null}
-          </div>
-          {showCast ? (
-            <>
-              <h3>Cast</h3>
-              <ul className={`cast ${!showImage || cast.length > 5 ? 'two__column' : ''}`}>
-                {cast.map((member: ICastMember) => (
-                  <li key={member.character.name}>
-                    <CastMember member={member} />
-                  </li>
-                ))}
-              </ul>
-            </>
-          ) : null}
-        </div>
-      </div>
-    </>
   );
 }

@@ -1,8 +1,6 @@
 import { ICastMember } from '../../types';
 import './style.scss';
 export function CastMember({ member }: { member: ICastMember }): JSX.Element {
-  console.log(member);
-
   return (
     <div className="cast-member">
       <div className="cast-member-image">
