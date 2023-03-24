@@ -10,7 +10,15 @@
     top: 0;
     z-index: 0;
     width: 100vw;
-    height: 40rem;
+    height: 15rem;
     background: linear-gradient(0deg, rgba(20, 20, 20, 1) 0%, rgba(14, 8, 8, 1) 35%, rgba(241, 243, 244, 0) 100%);
+  }
+}
+
+@media only screen and (min-width: 400px) {
+  .hero {
+    .overlay {
+      height: 40rem;
+    }
   }
 }

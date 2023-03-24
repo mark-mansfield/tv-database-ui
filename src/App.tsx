@@ -1,6 +1,6 @@
 import React, { useState, ReactChild, useRef, useEffect } from 'react';
 import './App.css';
-import { Hero, Search, Meta, CastMember } from './components';
+import { Hero, Search, Meta, CastMember, Loader } from './components';
 import { IShow, FormValues, ICastMember } from './types';
 import parse from 'html-react-parser';
 import DOMPurify from 'dompurify';
@@ -95,23 +95,17 @@ export default function App(): JSX.Element {
         </header>
         <Search handleSubmit={handleSubmit} />
         {error && <div>{error}</div>}
-        <Loading isLoading={isLoading}>
-          {show ? (
-            <Show show={show} onCancel={() => setShow(null)} />
-          ) : (
-            <>
-              {hasSearched && usedQuery && <Meta length={shows.length} query={usedQuery} />}
-              <ShowList shows={shows} onSelectShow={onSelectShow} />
-            </>
-          )}
-        </Loading>
+        {isLoading ? <Loader /> : null}
+        {show ? <Show show={show} onCancel={() => setShow(null)} /> : null}
+        {!show && !isLoading ? (
+          <>
+            {usedQuery ? <Meta length={shows.length} query={usedQuery} /> : null}
+            <ShowList shows={shows} onSelectShow={onSelectShow} />
+          </>
+        ) : null}
       </div>
     </>
   );
-}
-
-function Loading({ isLoading, children }: { isLoading: boolean; children: ReactChild }): JSX.Element {
-  return isLoading ? <div>Loading...</div> : <>{children}</>;
 }
 
 function ShowList({ shows, onSelectShow }: { shows: Array<IShow>; onSelectShow: (show: IShow) => void }): JSX.Element {
