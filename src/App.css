@@ -41,21 +41,28 @@
 }
 
 .show-list {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  grid-column-gap: 3.5px;
+  grid-row-gap: 0px;
 }
 
 .show-preview {
-  max-width: 300px;
-  width: 20%;
+  /* max-width: 300px;
+  width: 20%; */
+  height:100%;
+  position: relative;
   text-align: center;
-  margin-bottom: 30px;
   cursor: pointer;
+}
+
+button {
+  height: 100%;
 }
 
 .show-preview img {
   max-width: 100%;
-  margin-bottom: 3px;
 }
 
 .show-preview span {
@@ -124,4 +131,11 @@
 
 .cast-member-image img {
   max-width: 100%;
+}
+
+button {
+  background: none;
+  padding: 0;
+  margin: 0;
+  border: 0;
 }
