@@ -39,3 +39,18 @@ button {
   position: absolute;
   width: 1px;
 }
+
+button {
+  height: 100%;
+  background: none;
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+a,
+button {
+  color: dodgerBlue;
+  cursor: pointer;
+  font-weight: bold;
+}
