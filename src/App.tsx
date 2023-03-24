@@ -1,13 +1,14 @@
-import React, { useState, ReactChild, useRef } from 'react';
+import React, { useState, ReactChild, useRef, useEffect } from 'react';
 import './App.css';
 import { Hero, Search, Meta, CastMember } from './components';
 import { IShow, FormValues, ICastMember } from './types';
 import parse from 'html-react-parser';
 import DOMPurify from 'dompurify';
 
-
 export default function App(): JSX.Element {
-  const [heroImage, setHeroImage] = useState<string>('');
+  const [heroImage, setHeroImage] = useState<string>(
+    'https://raw.githubusercontent.com/jellyfin/jellyfin-ux/master/plugins/SVG/jellyfin-plugin-tvmaze.svg'
+  );
   const [query, setQuery] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
@@ -58,9 +59,9 @@ export default function App(): JSX.Element {
           })
         );
       })
-      .catch(() => {
+      .catch((e) => {
         setIsLoading(false);
-        setError('Could not load shows.');
+        setError('Could not load shows.', e);
       });
   }
 
@@ -72,11 +73,15 @@ export default function App(): JSX.Element {
       .then((r: Response) => r.json())
       .then((json: IShow) => {
         setIsLoading(false);
+        console.log(json);
         setShow(json);
-        setHeroImage(json.image.original);
+        if (json?.image?.original) {
+          setHeroImage(json.image.original);
+        }
       })
-      .catch(() => {
+      .catch((e) => {
         setIsLoading(false);
+        console.log(e);
         setError('Could not load show details.');
       });
   }
@@ -133,15 +138,6 @@ function ShowList({ shows, onSelectShow }: { shows: Array<IShow>; onSelectShow: 
               </div>
             )}
           </button>
-
-          // <div
-          //   key={show.id}
-          //   className="show-preview"
-          //   onClick={() => onSelectShow(show)}
-          // >
-          //   {show.image && <img src={show.image.medium} alt="" />}
-          //   {/* <span>{show.name}</span> */}
-          // </div>
         );
       })}
     </div>
@@ -149,6 +145,48 @@ function ShowList({ shows, onSelectShow }: { shows: Array<IShow>; onSelectShow: 
 }
 
 function Show({ show, onCancel }: { show: IShow; onCancel: () => void }): JSX.Element {
+  const MAX_TEXT = 360;
+  const [usedSummary, setUsedSummary] = useState('');
+  const [showFullSummary, setShowFullSummary] = useState(true);
+  const [hasLargeSummary, setHasLargeSummary] = useState(false);
+  const [summary, setSummary] = useState('');
+
+  function toggleShowMore() {
+    setShowFullSummary(!showFullSummary);
+    console.log('showing more', !showFullSummary);
+  }
+
+  useEffect(() => {
+    if (!showFullSummary) {
+      setUsedSummary(show.summary.substring(0, MAX_TEXT));
+    }
+    if (showFullSummary) {
+      setUsedSummary(show.summary);
+    }
+  }, [showFullSummary]);
+
+  //  because we need to set a default view of the summary
+  useEffect(() => {
+    if (!show.summary) return;
+
+    //  init a flag
+    const hasLargeSummary = show.summary.length > MAX_TEXT ? true : false;
+    setHasLargeSummary(hasLargeSummary);
+
+    // store the summary
+    setSummary(show.summary);
+
+    // set displayed summary to full or partial
+    if (hasLargeSummary) {
+      setUsedSummary(show.summary.substring(0, MAX_TEXT));
+      setShowFullSummary(false);
+    }
+
+    if (!hasLargeSummary) {
+      setUsedSummary(show.summary);
+    }
+  }, [show.summary]);
+
   const cast = show._embedded.cast;
   const showCast = cast.length > 0;
   const premierText = show.premiered ? 'Premiered ' + show.premiered : 'Yet to premiere';
@@ -163,7 +201,16 @@ function Show({ show, onCancel }: { show: IShow; onCancel: () => void }): JSX.El
         <div className="show-details">
           <h2>{show.name}</h2>
           <div className="show-meta">{premierText}</div>
-          <div>{sanitzedData}</div>
+          <div>
+            {sanitzedData}
+            {hasLargeSummary ? (
+              <>
+                <a onClick={toggleShowMore} aria-label="show full summary" tabIndex={0}>
+                  {showFullSummary ? 'less' : 'more'}
+                </a>
+              </>
+            ) : null}
+          </div>
           {showCast ? (
             <>
               <h3>Cast</h3>
