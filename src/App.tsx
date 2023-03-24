@@ -1,32 +1,7 @@
-import React, { useState, ReactChild } from 'react';
+import React, { useState, ReactChild, useRef } from 'react';
 import './App.css';
-import { Hero } from './components';
-
-interface IShow {
-  id: string;
-  name: string;
-  summary: string;
-  image: {
-    original: string;
-    medium: string;
-  };
-  premiered: string;
-  _embedded: {
-    cast: Array<ICastMember>;
-  };
-}
-
-interface ICastMember {
-  person: {
-    name: string;
-    image: {
-      medium: string;
-    };
-  };
-  character: {
-    name: string;
-  };
-}
+import { Hero, Search } from './components';
+import { IShow, FormValues, ICastMember } from './types';
 
 export default function App(): JSX.Element {
   const [heroImage, setHeroImage] = useState<string>('');
@@ -36,6 +11,8 @@ export default function App(): JSX.Element {
   const [hasSearched, setHasSearched] = useState<boolean>(false);
   const [shows, setShows] = useState<Array<IShow>>([]);
   const [show, setShow] = useState<IShow | null>(null);
+  const queryRef = useRef<string>('');
+  const usedQuery = queryRef.current;
 
   function onQueryChange(nextQuery: string): void {
     setHasSearched(false);
@@ -45,19 +22,39 @@ export default function App(): JSX.Element {
     setError('');
   }
 
-  function onSearch(): void {
+  function handleSubmit(values: FormValues): void {
+    queryRef.current = values.search;
     setHasSearched(false);
     setIsLoading(true);
     setShows([]);
     setShow(null);
     setError('');
 
-    fetch(`https://api.tvmaze.com/search/shows?q=${query}`)
+    fetch(`https://api.tvmaze.com/search/shows?q=${values.search}`)
       .then((r: Response) => r.json())
       .then((json: Array<{ show: IShow }>) => {
+        let foundImg = false;
+
+
+        let i = 0
+        while (foundImg == false) {
+          const imgPath = json[i].show.image.original;
+          if (imgPath) {
+            setHeroImage(imgPath);
+            foundImg = true;
+          }
+          i++
+        }
+
         setHasSearched(true);
         setIsLoading(false);
-        setShows(json.map((r) => r.show));
+        setShows(
+          json.map((r, idx) => {
+            if (idx) {
+            }
+            return r.show;
+          })
+        );
       })
       .catch(() => {
         setIsLoading(false);
@@ -83,43 +80,30 @@ export default function App(): JSX.Element {
   }
 
   return (
-    <div>
+    <>
       <Hero imgUrl={heroImage} />
       <div className="app">
         <header className="header">
           <h1>TV Database</h1>
         </header>
-        <form className="search">
-          <input
-            value={query}
-            onChange={(e) => onQueryChange(e.target.value)}
-            placeholder="Enter the name of a TV show..."
-          />
-          <button type="button" onClick={onSearch}>
-            Search
-          </button>
-        </form>
-
+        <Search handleSubmit={handleSubmit} />
         {error && <div>{error}</div>}
-
-        <div>
-          <Loading isLoading={isLoading}>
-            {show ? (
-              <Show show={show} onCancel={() => setShow(null)} />
-            ) : (
-              <>
-                {hasSearched && query && (
-                  <div className="results-meta">
-                    {shows.length} results for "{query}"
-                  </div>
-                )}
-                <ShowList shows={shows} onSelectShow={onSelectShow} />
-              </>
-            )}
-          </Loading>
-        </div>
+        <Loading isLoading={isLoading}>
+          {show ? (
+            <Show show={show} onCancel={() => setShow(null)} />
+          ) : (
+            <>
+              {hasSearched && query && (
+                <div className="results-meta">
+                  {shows.length} results for "{query}"
+                </div>
+              )}
+              <ShowList shows={shows} onSelectShow={onSelectShow} />
+            </>
+          )}
+        </Loading>
       </div>
-    </div>
+    </>
   );
 }
 
