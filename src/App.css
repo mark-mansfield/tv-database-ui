@@ -7,15 +7,12 @@
   width: 80%;
   display: flex;
   border-radius: 10px;
-  padding: 10px 14px;
   text-align: center;
   margin: auto;
 }
 
 .search input {
   width: 100%;
-  font-size: 22px;
-  line-height: 26px;
   border: none;
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
@@ -25,8 +22,6 @@
 
 .search button {
   width: 200px;
-  font-size: 22px;
-  line-height: 26px;
   border-color: #050;
   background-color: #070;
   color: white;

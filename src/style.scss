@@ -1,4 +1,9 @@
+html {
+  font-size: 100%;
+}
+
 body {
+  font-size: calc(1rem + 0.25vw);
   background-color: #141414;
   color: #fff;
   margin: 0;
@@ -6,4 +11,17 @@ body {
     'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+h1 {
+  font-size: calc(1.3rem + 3.6vw);
+}
+
+h2 {
+  font-size: calc(1.1rem + 3.6vw);
+}
+
+input,
+button {
+  font-size: calc(0.95rem + 0.25vw);
 }
