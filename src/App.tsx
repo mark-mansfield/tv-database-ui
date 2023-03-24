@@ -1,6 +1,6 @@
 import React, { useState, ReactChild, useRef } from 'react';
 import './App.css';
-import { Hero, Search } from './components';
+import { Hero, Search, Meta } from './components';
 import { IShow, FormValues, ICastMember } from './types';
 
 export default function App(): JSX.Element {
@@ -92,11 +92,7 @@ export default function App(): JSX.Element {
             <Show show={show} onCancel={() => setShow(null)} />
           ) : (
             <>
-              {hasSearched && usedQuery && (
-                <div className="results-meta">
-                  {shows.length} results for "{usedQuery}"
-                </div>
-              )}
+              {hasSearched && usedQuery && <Meta length={shows.length} query={usedQuery} />}
               <ShowList shows={shows} onSelectShow={onSelectShow} />
             </>
           )}

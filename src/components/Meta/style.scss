@@ -1,0 +1,18 @@
+.meta__wrapper {
+  width: 100%;
+  margin: 2rem 3rem 2rem 3rem;
+  font-size: 1rem;
+
+  &__results {
+    .query {
+      font-weight: bold;
+      color: dodgerBlue;
+    }
+  }
+}
+
+@media only screen and (min-width: 900px) {
+  .meta__wrapper {
+    margin: 2rem 3rem 2rem 0rem;
+  }
+}
