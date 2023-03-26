@@ -2,6 +2,8 @@ export interface IShow {
   id: string;
   name: string;
   summary: string;
+  genre: string[];
+  rating: { average: number };
   image: {
     original: string;
     medium: string;
