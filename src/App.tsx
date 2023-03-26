@@ -1,6 +1,6 @@
 import React, { useState, ReactChild, useRef, useEffect } from 'react';
 import './App.css';
-import { Hero, Search, Meta, Show, Loader ,ShowList} from './components';
+import { Hero, Search, Meta, Show, Loader, ShowList } from './components';
 import { IShow, FormValues } from './types';
 
 export const DEFAULT_HERO_IMAGE =
@@ -8,7 +8,6 @@ export const DEFAULT_HERO_IMAGE =
 
 export default function App(): JSX.Element {
   const [heroImage, setHeroImage] = useState<string>(DEFAULT_HERO_IMAGE);
-  const [query, setQuery] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
   const [_, setHasSearched] = useState<boolean>(false);
@@ -16,14 +15,6 @@ export default function App(): JSX.Element {
   const [show, setShow] = useState<IShow | null>(null);
   const queryRef = useRef<string>('');
   const usedQuery = queryRef.current;
-
-  function onQueryChange(nextQuery: string): void {
-    setHasSearched(false);
-    setQuery(nextQuery);
-    setShows([]);
-    setShow(null);
-    setError('');
-  }
 
   function handleSubmit(values: FormValues): void {
     queryRef.current = values.search;
@@ -93,5 +84,3 @@ export default function App(): JSX.Element {
     </>
   );
 }
-
-
