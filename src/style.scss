@@ -21,13 +21,13 @@ h2 {
   font-size: calc(1.1rem + 3.6vw);
 }
 h3 {
-  font-size: calc(1rem + 3.6vw);
+  font-size: calc(0.6rem + 3.6vw);
   margin: 1rem 1rem 1rem 0rem;
 }
 
 input,
 button {
-  font-size: calc(0.65rem + 0.25vw);
+  font-size: calc(0.75rem + 0.25vw);
 }
 
 .visuallyHidden {
@@ -71,6 +71,10 @@ button {
 
 .app {
   width: 100%;
+}
+
+.lowercase {
+  text-transform: capitalize;
 }
 
 @media screen and (min-width: 480px) {

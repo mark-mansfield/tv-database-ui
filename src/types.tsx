@@ -2,8 +2,9 @@ export interface IShow {
   id: string;
   name: string;
   summary: string;
-  genre: string[];
+  genres: string[];
   rating: { average: number };
+  language: string
   image: {
     original: string;
     medium: string;

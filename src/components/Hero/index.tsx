@@ -16,6 +16,7 @@ export function Hero({ imgUrl }: { imgUrl: string }): JSX.Element {
           style={{ objectFit: 'cover' }}
           width={'100%'}
           alt="Image Alt"
+          effect="opacity"
           placeholder={<div style={{ width: '100%', height: '100%', backgroundColor: 'none' }}></div>}
         />
       ) : null}
