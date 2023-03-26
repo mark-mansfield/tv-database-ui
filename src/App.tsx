@@ -1,6 +1,6 @@
 import React, { useState, ReactChild, useRef, useEffect } from 'react';
 import './App.css';
-import { Hero, Search, Meta, Show, Loader } from './components';
+import { Hero, Search, Meta, Show, Loader ,ShowList} from './components';
 import { IShow, FormValues } from './types';
 
 export const DEFAULT_HERO_IMAGE =
@@ -46,9 +46,9 @@ export default function App(): JSX.Element {
           })
         );
       })
-      .catch((e) => {
+      .catch(() => {
         setIsLoading(false);
-        setError('Could not load shows.', e);
+        setError('Could not load shows.');
       });
   }
 
@@ -94,32 +94,4 @@ export default function App(): JSX.Element {
   );
 }
 
-function ShowList({ shows, onSelectShow }: { shows: Array<IShow>; onSelectShow: (show: IShow) => void }): JSX.Element {
-  return (
-    <div className="show-list">
-      {shows.map((show) => {
-        return (
-          <button
-            aria-label={`show ${show.name} selected click to read more`}
-            key={show.id}
-            tabIndex={0}
-            className="show-preview"
-            onClick={() => onSelectShow(show)}>
-            {show.image ? (
-              <div className="">
-                <img src={show?.image.medium} alt="" key={show.id} tabIndex={-1} width="100%" />
-                <span tabIndex={-1}>{show.name}</span>
-              </div>
-            ) : (
-              <div className="">
-                <p className="show-name" tabIndex={-1}>
-                  {show.name}
-                </p>
-              </div>
-            )}
-          </button>
-        );
-      })}
-    </div>
-  );
-}
+
