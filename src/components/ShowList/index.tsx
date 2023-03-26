@@ -20,19 +20,17 @@ export function ShowList({
             className="show-preview"
             onClick={() => onSelectShow(show)}>
             <div className={!show?.image?.medium ? 'no-image-bg' : ''}>
-              <LazyLoadImage effect="opacity"  key={show.id} src={ show?.image?.medium ||
-                  'https://raw.githubusercontent.com/jellyfin/jellyfin-ux/master/plugins/SVG/jellyfin-plugin-tvmaze.svg?sanitize=true'} tabIndex={-1} width="100%"/>
-              {/* <img
-                className="image fade-in"
+              <LazyLoadImage
+                effect="opacity"
+                key={show.id}
                 src={
                   show?.image?.medium ||
                   'https://raw.githubusercontent.com/jellyfin/jellyfin-ux/master/plugins/SVG/jellyfin-plugin-tvmaze.svg?sanitize=true'
                 }
-                alt=""
-                key={show.id}
                 tabIndex={-1}
+                width="100%"
+              />
 
-              /> */}
               <div className="overlay lowercase">
                 <ul>
                   <li className="overlay-name">{show.name}</li>
