@@ -9,7 +9,12 @@ export const Summary: React.FC<{ summary: string }> = ({ summary }) => {
   const [showFullSummary, setShowFullSummary] = useState(true);
   const [showToggle, setShowToggle] = useState(false);
 
-  function toggleShowMore() {
+  function toggleShowMore(event: any) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      setShowFullSummary(!showFullSummary);
+    }
+
     setShowFullSummary(!showFullSummary);
   }
 
@@ -47,15 +52,19 @@ export const Summary: React.FC<{ summary: string }> = ({ summary }) => {
   const text = parse(DOMPurify.sanitize(usedSummary));
 
   return (
-    <div>
-      {text}
+    <>
+      <p tabIndex={0}>{text}</p>
       {showToggle ? (
         <>
-          <div onClick={toggleShowMore} role="button" className="button" aria-label="show full summary" tabIndex={0}>
+          <button
+            onClick={(e) => toggleShowMore(e)}
+            className="button lowercase"
+            aria-label={!showFullSummary ?'hear full summary' : 'hear less summary'}
+            tabIndex={0}>
             {showFullSummary ? 'less' : 'more'}
-          </div>
+          </button>
         </>
       ) : null}
-    </div>
+    </>
   );
 };

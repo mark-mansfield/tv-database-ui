@@ -2,7 +2,7 @@ import { ICastMember } from '../../types';
 import './style.scss';
 export function CastMember({ member }: { member: ICastMember }): JSX.Element {
   return (
-    <div className="cast-member">
+    <div className="cast-member"  aria-label="cast" tabIndex={0}>
       <div className="cast-member-image">
         <img
           width={200}
@@ -15,9 +15,9 @@ export function CastMember({ member }: { member: ICastMember }): JSX.Element {
       </div>
       <ul>
         <li>
-          <strong>{member.person.name}</strong>
+          <strong  aria-label={member.person.name} tabIndex={0}>{member.person.name}</strong>
         </li>
-        <li> {member.character.name}</li>
+        <li  aria-label={member.character.name} tabIndex={0}> {member.character.name}</li>
       </ul>
     </div>
   );

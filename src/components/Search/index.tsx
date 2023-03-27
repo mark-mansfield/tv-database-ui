@@ -11,7 +11,13 @@ export const Search: React.FC<{
         <label htmlFor="search" className="visuallyHidden">
           search
         </label>
-        <Field id="search" name="search" placeholder="Enter the name of a TV Show" type="search" tabIndex={0} />
+        <Field
+          id="search"
+          name="search"
+          placeholder="Enter the name of a TV Show"
+          type="search"
+          tabIndex={0}
+        />
         <button type="submit" aria-label="search button" tabIndex={0}>
           Search
         </button>

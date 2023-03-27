@@ -28,14 +28,16 @@
   margin: 20px 0;
 }
 
-
-
 .header {
   width: 80%;
   margin-left: 36px;
 }
 
 .button {
+  height: auto;
+  background: none;
+  padding: 0;
+  margin: 0;
   cursor: pointer;
   color: dodgerBlue;
 }

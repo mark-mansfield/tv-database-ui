@@ -71,7 +71,11 @@ export default function App(): JSX.Element {
           <h1>TV Database</h1>
         </header>
         <Search handleSubmit={handleSubmit} />
-        {error && <div>{error}</div>}
+        {error && (
+          <div aria-label="error" tabIndex={0}>
+            {error}
+          </div>
+        )}
         {isLoading ? <Loader /> : null}
         {show ? <Show show={show} onCancel={() => setShow(null)} /> : null}
         {!show && !isLoading ? (

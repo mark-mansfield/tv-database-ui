@@ -10,18 +10,18 @@ export function Show({ show, onCancel }: { show: IShow; onCancel: () => void }):
   return (
     <>
       <div className="show">
-        <button className="show-back" onClick={onCancel}>
+        <button className="show-back" aria-label="Back to list" tabIndex={0} onClick={onCancel}>
           Back to list
         </button>
         <div className="show__detail-wrapper">
           {showImage ? (
-            <div className="show-image">
-              <img src={show.image.original} alt="" />
+            <div className="show-image" aria-label="show image">
+              <img src={show.image.original} alt={`${show.name}`} />
             </div>
           ) : null}
           <div className="show-text">
-            <h2>{show.name}</h2>
-            <p>{premierText}</p>
+            <h2 aria-label={`${show.name}`}tabIndex={0} >{show.name}</h2>
+            <p aria-label={premierText} tabIndex={0}>{premierText}</p>
             <Summary summary={show.summary} />
           </div>
         </div>
